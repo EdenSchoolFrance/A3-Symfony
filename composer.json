@@ -1,0 +1,10 @@
+{
+    "name": "projet/symfo",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "require": {
+    }
+}

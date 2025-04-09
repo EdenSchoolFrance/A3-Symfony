@@ -2,19 +2,20 @@ FROM php:8.3-apache
 
 WORKDIR /var/www/html
 
-# Install dependencies for Composer and PHP extensions
-RUN apt-get update && apt-get install -y \
-    curl \
-    git \
-    unzip \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y libzip-dev
 
+# Install PHP extensions: zip, PDO, and PDO MySQL
+RUN docker-php-ext-install zip pdo pdo_mysql
+
+# Optional: Install other dependencies (if needed)
+RUN apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev && \
+    docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    docker-php-ext-install gd
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 COPY . .
 
-RUN docker-php-ext-install pdo pdo_mysql
 
 RUN a2enmod rewrite
 
